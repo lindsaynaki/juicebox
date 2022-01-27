@@ -1,4 +1,5 @@
 const { client, getAllUsers, createUser } = require('./index');
+const { users } = require('./seed_data')
 
 // this function should call a query which drops all tables from our database
 async function dropTables() {
@@ -27,10 +28,8 @@ async function dropTables() {
   async function createInitialUsers () {
       try {
           console.log("Starting to create users...");
-          const albert = await createUser({ username: 'albert', password: 'bertie99' }); 
-          const albertTwo = await createUser({ username: 'albert', password: 'imposter_albert' });
-          console.log(albert);
-          console.log(albertTwo)
+          const newUsers = await Promise.all(users.map(createUser));
+          console.log(newUsers);
           console.log("Finished creating users!");
       } catch(error) {
           console.error("Error creating users!")
