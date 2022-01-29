@@ -1,10 +1,7 @@
-// grabs our client with destructuring from the export in index.js
-const { client, getAllUsers, createUser, updateUser, getUserbyId, 
-  createPost, updatePost, getAllPosts, getPostsByUser, 
-  addTagsToPost, createTags, getPostsByTagName } = require('./index');
+const { client, getAllUsers, createUser, updateUser, 
+  createPost, updatePost, getAllPosts, getPostsByTagName } = require('./index');
 const { users } = require('./seedData')
 
-// this function should call a query that dops all the tables from our databse
 const dropTables = async () => {
     try {
         console.log('starting to drop tables...')
@@ -17,11 +14,10 @@ const dropTables = async () => {
         console.log('finished dropping tables!')
     } catch(error) {
         console.error('error dropping tables!')
-        throw error;  // we pass the error up to the function that calls dropTables
+        throw error;  
     }
 }
 
-// this function calls a query which creates all tables for our database
 const createTables = async () => {
     try {
         console.log('starting to build tables...')
@@ -58,7 +54,7 @@ const createTables = async () => {
         console.log('finished building tables!')
     } catch(error) {
         console.error('error building tables!')
-        throw error; // pass the error up to the function that calls createTables
+        throw error; 
     }
 }
 

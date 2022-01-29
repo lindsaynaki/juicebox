@@ -1,9 +1,4 @@
-// imports the pg module
 const { Client } = require('pg');
-
-// this file provides the utility functions that the rest of the app will use. 
-
-// supply the DB name and location of the database
 const client = new Client('postgres://localhost:5432/juiceboxprac-dev');
 
 const createUser = async ({username, password, name, location}) => {
@@ -24,7 +19,6 @@ const createUser = async ({username, password, name, location}) => {
 const updateUser = async (id, fields = {}) => {
     const setString = Object.keys(fields).map((key, index) => `"${key}" = $${index + 1}`).join(', ');
 
-    // return early if this is called without fields
     if (setString.length === 0) {
         return;
     }
@@ -42,7 +36,6 @@ const updateUser = async (id, fields = {}) => {
     }
 }
 
-// this function selects id and username columns from the users table from the database
 const getAllUsers = async () => {
     const { rows } = await client.query (`
         SELECT id, username FROM users;
@@ -67,8 +60,6 @@ const getUserbyId = async (userId) => {
     }
 }
 
-
-// POSTS 
 const createPost = async ({ authorId, title, content, tags = []}) => {
     try {
         const { rows: [post] } = await client.query(`
