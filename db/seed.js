@@ -1,6 +1,22 @@
-const { client, getAllUsers, createUser, updateUser, 
-  createPost, updatePost, getAllPosts, getPostsByTagName } = require('./index');
+const { 
+    client, 
+    createUser,
+    updateUser,
+    getAllUsers,
+    getUserbyId, 
+    createPost,
+    updatePost,
+    getAllPosts,
+    getPostsByUser,
+    createTags,
+    createPostTag,
+    addTagsToPost,
+    getPostById,
+    getPostsByTagName
+} = require('./index');
+
 const { users } = require('./seedData')
+const util = require('util')
 
 const dropTables = async () => {
     try {
@@ -118,10 +134,12 @@ const testDB = async () => {
     try {
         console.log('starting to test database...')
 
+        // getAllUsers
         console.log('calling getAllUsers')
         const users = await getAllUsers();
         console.log("getAllUsers: ", users)
 
+        // updateUser
         console.log('calling updateUser on users[0]')
         const updateUserResult = await updateUser(users[0].id, {
             name: "Newname Sogood",
@@ -129,10 +147,12 @@ const testDB = async () => {
         })
         console.log('result: ', updateUserResult);
         
+        // getAllPosts
         console.log('calling getAllPosts');
         const posts = await getAllPosts();
         console.log('getAllPosts: ', posts);
 
+        // updatePost
         console.log('calling updatePost on posts[0]');
         const updatedPostResult = await updatePost(posts[0].id, {
             title: "new title",
@@ -140,15 +160,17 @@ const testDB = async () => {
         });
         console.log('results: ', updatedPostResult);
         
+
         console.log("Calling updatePost on posts[1], only updating tags");
         const updatePostTagsResult = await updatePost(posts[1].id, {
           tags: ["#youcandoanything", "#redfish", "#bluefish"]
         });
         console.log("Result:", updatePostTagsResult);
 
+        // getPostsByTagName
         console.log('calling getPostsByTagName with #happy');
         const postsWithHappy = await getPostsByTagName("#happy");
-        console.log("Result: ", postsWithHappy)
+        console.log("Result: ", util.inspect(postsWithHappy, false, 5, true))
 
         console.log('finished database test!')
     } catch (error) {
