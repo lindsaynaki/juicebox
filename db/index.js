@@ -53,8 +53,8 @@ const getUserbyId = async (userId) => {
         const { rows: [user] } = await client.query(`
             SELECT id, username, name, location, active
             FROM users
-            WHERE id = ${id}
-        `);
+            WHERE id = $1
+            `, [userId]);
 
     if (!user) {
         return null
@@ -259,6 +259,19 @@ const getPostsByTagName = async (tagName) => {
   }
 }
 
+const getUserByUsername = async (username) => {
+  try {
+    const { rows: [user] } = await client.query(`
+      SELECT * 
+      FROM users
+      WHERE username=$1;
+      `, [username]);
+      return user;
+  } catch(error) {
+    throw error;
+  }
+}
+
 module.exports = {
     client,
     createUser,
@@ -274,5 +287,6 @@ module.exports = {
     addTagsToPost,
     getPostById,
     getPostsByTagName,
-    getAllTags
+    getAllTags,
+    getUserByUsername
 }
