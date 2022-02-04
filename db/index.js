@@ -60,6 +60,7 @@ const getUserbyId = async (userId) => {
         return null
     }
     user.posts = await getPostsByUser(userId)
+    return user;
     } catch(error) {
         throw error; 
     }

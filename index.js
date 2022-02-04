@@ -1,10 +1,9 @@
-require('dotenv').config()
+require('dotenv').config();
 const express = require('express');
 const app = express();
-const { client } = require('./db')
+const { client } = require('./db');
 const morgan = require('morgan');
-const jwt = require('jsonwebtoken');
-const { PORT, JWT_SECRET } = process.env;
+const { PORT } = process.env;
 
 app.use(morgan('dev'));
 app.use(express.json());
@@ -21,15 +20,15 @@ app.use((req, res, next) => {
 // app.use('/api', router)
 app.use('/api', require('./api'))
 
-app.use((req, res, next) => {
-  const token = jwt.sign({ 
-    "id": 1,
-    "username": "albert", 
-    "password": "bertie99"
-    }, JWT_SECRET);
-  console.log(token)
-  next();
-});
+// app.use((req, res, next) => {
+//   const token = jwt.sign({ 
+//     "username": "albert", 
+//     "password": "bertie99",
+//     "id": 1,
+//     }, JWT_SECRET);
+//   console.log(token)
+//   next();
+// });
 
 app.listen(PORT, () => {
   console.log('The server is up on port', `http://localhost:${PORT}`)

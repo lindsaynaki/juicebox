@@ -1,3 +1,5 @@
+// /api/posts
+
 const express = require('express');
 const postsRouter = express.Router();
 const { getAllPosts } = require('../db');
