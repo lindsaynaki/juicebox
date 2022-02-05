@@ -238,7 +238,7 @@ const addTagsToPost = async (postId, tagList) => {
       `, [postId])
 
       const { rows: [author] } = await client.query(`
-        SELECT id, username, name, location
+        SELECT id, username, name, location, active
         FROM users
         WHERE id=$1;
       `, [post.authorId])

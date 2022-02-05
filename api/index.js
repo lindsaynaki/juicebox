@@ -3,12 +3,6 @@ const express = require('express');
 const { getUserbyId } = require('../db');
 const router = express.Router();
 
-// GET /api
-// router.get('/', (req, res) => {
-//     console.log("A get request is being made to /api");
-//     res.send('<h1>This is the API page</h1>');
-// });
-
 // bring in jwt (authorization) 
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = process.env;
@@ -61,7 +55,7 @@ router.use('/users', require('./users'))
 router.use('/posts', require('./posts'))
 router.use('/tags', require('./tags'))
 
-// error handling
+// 500 internal server error handling
 router.use(({ name, message }, req, res, next) => {
     res.send({
         name,

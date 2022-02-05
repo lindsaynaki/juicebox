@@ -20,19 +20,13 @@ app.use((req, res, next) => {
 // app.use('/api', router)
 app.use('/api', require('./api'))
 
-// app.get('/background/:color', (req, res, next) => {
-//   res.send(`
-//     <body style="background: ${ req.params.color };">
-//       <h1>Hello World</h1>
-//     </body>
-//   `);
-// });
-
-// app.get('/add/:first/to/:second', (req, res, next) => {
-//   res.send(`<h1>${ req.params.first } + ${ req.params.second } = ${
-//     Number(req.params.first) + Number(req.params.second)
-//    }</h1>`);
-// });
+// 404 handler
+app.use('*', (req, res, next) => {
+  res.status(404).send({
+    name: "404",
+    message: "Page Not Found"
+  })
+});
 
 app.listen(PORT, () => {
   console.log('The server is up on port', `http://localhost:${PORT}`)

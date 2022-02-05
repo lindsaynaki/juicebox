@@ -106,7 +106,7 @@ postsRouter.delete('/:postId', requireUser, async (req, res, next) => {
         message: "You cannot delete a post which is not yours" 
       } : { 
         name: "PostNotFoundError",
-        message: "That post des not exist"
+        message: "That post does not exist"
       });
     }
   } catch({ name, message }) {
