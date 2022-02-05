@@ -20,14 +20,18 @@ app.use((req, res, next) => {
 // app.use('/api', router)
 app.use('/api', require('./api'))
 
-// app.use((req, res, next) => {
-//   const token = jwt.sign({ 
-//     "username": "albert", 
-//     "password": "bertie99",
-//     "id": 1,
-//     }, JWT_SECRET);
-//   console.log(token)
-//   next();
+// app.get('/background/:color', (req, res, next) => {
+//   res.send(`
+//     <body style="background: ${ req.params.color };">
+//       <h1>Hello World</h1>
+//     </body>
+//   `);
+// });
+
+// app.get('/add/:first/to/:second', (req, res, next) => {
+//   res.send(`<h1>${ req.params.first } + ${ req.params.second } = ${
+//     Number(req.params.first) + Number(req.params.second)
+//    }</h1>`);
 // });
 
 app.listen(PORT, () => {

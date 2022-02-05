@@ -66,7 +66,7 @@ const getUserbyId = async (userId) => {
     }
 }
 
-const createPost = async ({ authorId, title, content, tags = []}) => {
+const createPost = async ({ authorId, title, content, tags }) => {
     try {
         const { rows: [post] } = await client.query(`
             INSERT INTO posts ("authorId", title, content)
@@ -74,9 +74,11 @@ const createPost = async ({ authorId, title, content, tags = []}) => {
             RETURNING *; 
         `, [authorId, title, content]
         );
-
+        if (tags) {
         const tagList = await createTags(tags)
         return await addTagsToPost(post.id, tagList);
+        }
+        return getPostById(post.id)
     } catch(error) {
         throw error;
     }
