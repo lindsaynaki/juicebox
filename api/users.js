@@ -29,7 +29,7 @@ usersRouter.post('/login', async (req, res, next) => {
   if (!username || !password) {
     next({
       name: "MissingCredentialsError",
-      message: "Please suppy both a username and password"
+      message: "Please supply both a username and password"
     });
   }
   try {
@@ -85,6 +85,32 @@ usersRouter.post('/register', async(req, res, next) => {
     next({ name, message })
   }
 });
+
+// PATCH '/api/users/:userId'
+usersRouter.patch('/:userId', requireUser, async (req, res, next) => {
+  const { userId } = req.params
+
+  try {
+    const user = await getUserbyId(userId)
+
+    if (!user) {
+      next({
+        name: "UserNotFound",
+        message: "The user does not exist"
+      })
+    } else if (req.user.id !== user.id) {
+        next({
+          name: "UnauthorizedUserError",
+          message: "Unauthorized user, you cannot deactivate another user"
+        })
+    } else {
+      const updatedUser = await updateUser(userId, {active: true})
+      res.send({user: updatedUser})
+    } 
+  } catch ({name, message} ) {
+    next({name, message})
+  }
+})
 
 // DELETE '/api/users/:userId'
 usersRouter.delete('/:userId', requireUser, async (req, res, next) => {
