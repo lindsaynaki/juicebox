@@ -2,7 +2,7 @@
 const express = require('express');
 const postsRouter = express.Router();
 const { getAllPosts, createPost, updatePost, getPostById } = require('../db');
-const { requireUser } = require('./utils')
+const { requireActiveUser } = require('./utils')
 
 postsRouter.use((req, res, next) => {
     console.log("A request is being made to /posts");
@@ -14,7 +14,7 @@ postsRouter.get('/', async (req, res) => {
   const allPosts = await getAllPosts();
 
   const posts = allPosts.filter(post => {
-    return ( post.active || ( req.user && post.author.id === req.user.id ))
+    return (( post.active && post.author.active) || ( req.user && post.author.id === req.user.id))
   })
 
   // now posts will only containt posts that have a true active status 
@@ -25,7 +25,7 @@ postsRouter.get('/', async (req, res) => {
 
 // POST '/api/posts'
 // first function requireUser to check if user exists then comes back here
-postsRouter.post('/', requireUser, async (req, res, next) => {
+postsRouter.post('/', requireActiveUser, async (req, res, next) => {
   const { title, content, tags = '' } = req.body;
   if (!title || !content) {
     next({
@@ -55,7 +55,7 @@ postsRouter.post('/', requireUser, async (req, res, next) => {
 })
 
 // PATCH /api/posts/:postId
-postsRouter.patch('/:postId', requireUser, async (req, res, next) => {
+postsRouter.patch('/:postId', requireActiveUser, async (req, res, next) => {
   const { postId } = req.params;
   const { title, content, tags } = req.body; 
 
@@ -92,7 +92,7 @@ postsRouter.patch('/:postId', requireUser, async (req, res, next) => {
 });
 
 // DELETE /api/posts/:postId
-postsRouter.delete('/:postId', requireUser, async (req, res, next) => {
+postsRouter.delete('/:postId', requireActiveUser, async (req, res, next) => {
   try {
     const post = await getPostById(req.params.postId)
     

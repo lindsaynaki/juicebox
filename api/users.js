@@ -89,22 +89,25 @@ usersRouter.post('/register', async(req, res, next) => {
 // DELETE '/api/users/:userId'
 usersRouter.delete('/:userId', requireUser, async (req, res, next) => {
   const { userId } = req.params
-  
+
   try {
     const user = await getUserbyId(userId)
 
-    if (user && req.user.id === user.id) {
-        const updatedUser = await updateUser(userId, {active: false})
-        res.send({user: updatedUser})
+    if (!user) {
+      next({
+        name: "UserNotFound",
+        message: "The user does not exist"
+      })
+    } else if (req.user.id !== user.id) {
+        next({
+          name: "UnauthorizedUserError",
+          message: "Unauthorized user, you cannot deactivate another user"
+        })
+    } else {
+      const updatedUser = await updateUser(userId, {active: false})
+      res.send({user: updatedUser})
     } 
-    next( user ? {
-      name: "UnauthorizedUserError",
-      message: "Unauthorized user, you cannot deactivate another user"
-    } : {
-      name: "UserNotFound",
-      message: "The user does not exist"
-    });
-    } catch ({name, message} ) {
+  } catch ({name, message} ) {
     next({name, message})
   }
 })
