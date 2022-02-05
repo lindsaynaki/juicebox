@@ -11,7 +11,13 @@ postsRouter.use((req, res, next) => {
 
 // GET '/api/posts'
 postsRouter.get('/', async (req, res) => { 
-  const posts = await getAllPosts();
+  const allPosts = await getAllPosts();
+
+  const posts = allPosts.filter(post => {
+    return ( post.active || ( req.user && post.author.id === req.user.id ))
+  })
+
+  // now posts will only containt posts that have a true active status 
   res.send({
     posts
   });
@@ -82,6 +88,29 @@ postsRouter.patch('/:postId', requireUser, async (req, res, next) => {
     }
   } catch ({ name, message }) {
     next({ name, message }); 
+  }
+});
+
+// DELETE /api/posts/:postId
+postsRouter.delete('/:postId', requireUser, async (req, res, next) => {
+  try {
+    const post = await getPostById(req.params.postId)
+    
+    if (post && post.author.id === req.user.id) {
+      const updatedPost = await updatePost(post.id, {active: false});
+
+      res.send({ post: updatedPost})
+    } else {
+      next( post ? {
+        name: "UnauthorizedUserError",
+        message: "You cannot delete a post which is not yours" 
+      } : { 
+        name: "PostNotFoundError",
+        message: "That post des not exist"
+      });
+    }
+  } catch({ name, message }) {
+    next({ name, message })
   }
 });
 
