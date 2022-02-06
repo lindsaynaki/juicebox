@@ -89,7 +89,7 @@ postsRouter.patch('/:postId', requireActiveUser, async (req, res, next) => {
 postsRouter.delete('/:postId', requireActiveUser, async (req, res, next) => {
   try {
     const post = await getPostById(req.params.postId)
-    
+
     if (post && post.author.id === req.user.id) {
       const updatedPost = await updatePost(post.id, {active: false});
 

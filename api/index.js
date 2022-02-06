@@ -7,6 +7,11 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = process.env;
 
+// GET /api
+router.get('/', (req, res) => {
+    res.send('<h1>API Home Page</h1>')
+})
+
 // authorization
 router.use( async (req, res, next) => {
     const prefix = 'Bearer '
