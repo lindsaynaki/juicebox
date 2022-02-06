@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const { client } = require('./db');
 const morgan = require('morgan');
-const { PORT } = process.env;
+const { PORT = 3000 } = process.env;
 
 app.use(morgan('dev'));
 app.use(express.json());
