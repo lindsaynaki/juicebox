@@ -1,7 +1,6 @@
 // api/utils
 
 const requireUser = (req, res, next) => {
-    // if user does not exist, send an error
     if(!req.user) {
         next({
             name: "MissingUserError",

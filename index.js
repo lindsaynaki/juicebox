@@ -16,8 +16,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// const router = require('./api')
-// app.use('/api', router)
 app.use('/api', require('./api'))
 
 // 404 handler

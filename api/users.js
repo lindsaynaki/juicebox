@@ -1,12 +1,10 @@
 // /api/users
-
 const express = require('express');
 const usersRouter = express.Router();
 const { getAllUsers, getUserByUsername, createUser, getUserbyId, updateUser } = require('../db');
 const { requireUser } = require('./utils')
 const jwt = require('jsonwebtoken')
 const { JWT_SECRET } = process.env;
-
 
 usersRouter.use((req, res, next) => {
     console.log("A request is being made to /users");
@@ -37,7 +35,6 @@ usersRouter.post('/login', async (req, res, next) => {
 
     if (user && user.password == password) {
       const token = jwt.sign(user, JWT_SECRET)
-      console.log('token: ', token)
       res.send({token, message: "you're logged in!"});
     } else {
       next({
@@ -46,7 +43,6 @@ usersRouter.post('/login', async (req, res, next) => {
       })
     }
   } catch(error) {
-    console.log(error);
     next(error)
   }
 });
@@ -58,7 +54,6 @@ usersRouter.post('/register', async(req, res, next) => {
   try {
     const userExists = await getUserByUsername(username);
   
-    // check if user already exists
     if (userExists) {
       next({
         mame: 'UserExistsError',

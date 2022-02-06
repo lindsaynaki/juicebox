@@ -3,7 +3,7 @@ const express = require('express');
 const { getUserbyId } = require('../db');
 const router = express.Router();
 
-// bring in jwt (authorization) 
+// jwt
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = process.env;
 
@@ -49,13 +49,11 @@ router.use((req, res, next) => {
 })
 
 // routers
-// const usersRouter = require('./users')
-// router.use('/users', usersRouter)
 router.use('/users', require('./users'))
 router.use('/posts', require('./posts'))
 router.use('/tags', require('./tags'))
 
-// 500 internal server error handling
+// 500 error handling
 router.use(({ name, message }, req, res, next) => {
     res.send({
         name,

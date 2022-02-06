@@ -17,14 +17,12 @@ postsRouter.get('/', async (req, res) => {
     return (( post.active && post.author.active) || ( req.user && post.author.id === req.user.id))
   })
 
-  // now posts will only containt posts that have a true active status 
   res.send({
     posts
   });
 })
 
 // POST '/api/posts'
-// first function requireUser to check if user exists then comes back here
 postsRouter.post('/', requireActiveUser, async (req, res, next) => {
   const { title, content, tags = '' } = req.body;
   if (!title || !content) {
@@ -34,17 +32,14 @@ postsRouter.post('/', requireActiveUser, async (req, res, next) => {
     })
   }
   const { id: authorId } = req.user
-  console.log('req.user: ', req.user)
   const postData = {};
 
-  // if there are tags 
   if (tags.length) {
     const tagArray = tags.trim().split(/\s+/)
     postData.tags = tagArray;
   }
   try {
     const newPostData = {...postData, authorId, title, content}
-    console.log('new post: ', newPostData)
     const post = await createPost(newPostData)
     if (post) {
     res.send(post);
@@ -59,10 +54,9 @@ postsRouter.patch('/:postId', requireActiveUser, async (req, res, next) => {
   const { postId } = req.params;
   const { title, content, tags } = req.body; 
 
-  const updateFields = {} ;
+  const updateFields = {};
 
   if (tags && tags.length > 0) {
-    //adding tags as an array to object updateFields as key and values
     updateFields.tags = tags.trim().split(/\s+/);
   }
 
